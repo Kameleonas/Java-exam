@@ -1,6 +1,5 @@
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
@@ -13,8 +12,7 @@ public class Functions {
                 [2] - naujas išlaidų įrašas;
                 [3] - rasti pajamų įrašą;
                 [4] - rasti išlaidų įrašą;
-                [5] - išeiti;
-                """);
+                [5] - išeiti;""");
     }
 
     public static void program(Biudzetas biudzetas, Scanner scanner) {
@@ -91,13 +89,12 @@ public class Functions {
 
         do {
             System.out.print("""
-                    [1] - grįni pinigai;
-                    [2] - bankinis pavedimas;
-                    """);
+                    [1] - gryni pinigai;
+                    [2] - bankinis pavedimas;""");
             index = scanner.nextInt();
         } while (index != 1 && index != 2);
 
-        if (index == 2) {
+        if (pajamosArIslaidos.equals("pajamos") && index == 2) {
             System.out.println("""
                     Ar pavedimas baigtas ir pinigai gauti?
                     [1] - Taip;
