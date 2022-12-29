@@ -1,18 +1,17 @@
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class Biudzetas {
     ArrayList<Irasas> irasas = new ArrayList<>();
 
-    public double balansas(ArrayList<PajamuIrasas> pajamuIrasas, ArrayList<IslaiduIrasas> islaiduIrasas) {
+    public double balansas(ArrayList<Irasas> irasas) {
         double suma1 = 0;
         double suma2 = 0;
-        for (PajamuIrasas element: pajamuIrasas) {
+        for (PajamuIrasas element: gautiPajamuIrasus(irasas)) {
             if (element.getSuma() != 0){
                 suma1 += element.getSuma();
             }
         }
-        for (IslaiduIrasas element: islaiduIrasas) {
+        for (IslaiduIrasas element: gautiIslaiduIrasus(irasas)) {
             if (element.getSuma() != 0){
             suma2 += element.getSuma();
             }
@@ -24,12 +23,23 @@ public class Biudzetas {
         this.irasas.add(irasas);
     }
 
-//    public ArrayList<PajamuIrasas> gautiPajamuIrasus(ArrayList<Irasas> irasas) {
-//        ArrayList<PajamuIrasas> pajamuIrasai = new ArrayList<>();
-//        for (Irasas element: irasas) {
-//            if (element.getId().contains("IN")){
-//                pajamuIrasai.add(new PajamuIrasas(element.getSuma(), element.getKategorijosIndeksas(), element.getDateTime(), element.getPapildomaInfo(), element.));
-//            }
-//        }
-//    }
+    public ArrayList<PajamuIrasas> gautiPajamuIrasus(ArrayList<Irasas> irasas) {
+        ArrayList<PajamuIrasas> pajamuIrasai = new ArrayList<>();
+        for (Irasas element: irasas) {
+            if (element instanceof PajamuIrasas){
+                pajamuIrasai.add((PajamuIrasas) element);
+            }
+        }
+        return pajamuIrasai;
+    }
+
+    public ArrayList<IslaiduIrasas> gautiIslaiduIrasus(ArrayList<Irasas> irasas) {
+        ArrayList<IslaiduIrasas> islaiduIrasai = new ArrayList<>();
+        for (Irasas element: irasas) {
+            if (element instanceof IslaiduIrasas){
+                islaiduIrasai.add((IslaiduIrasas) element);
+            }
+        }
+        return islaiduIrasai;
+    }
 }

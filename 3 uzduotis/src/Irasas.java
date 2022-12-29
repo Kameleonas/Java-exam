@@ -8,14 +8,12 @@ public class Irasas {
     private static int counter1 = 0;
     private static int counter2 = 0;
 
-    public Irasas(double suma, String dateTime, int kategorijosIndeksas, String papildomaInfo) {
+    public Irasas(double suma, String dateTime, int kategorijosIndeksas, String papildomaInfo, String pajamosArIslaidos) {
         this.suma = suma;
         this.dateTime = dateTime;
         this.kategorijosIndeksas = kategorijosIndeksas;
         this.papildomaInfo = papildomaInfo;
-    }
 
-    public Irasas(String pajamosArIslaidos) {
         if (pajamosArIslaidos.equals("pajamos")) {
             id += Programa.prefixPajamosID + counter1;
             counter1++;
@@ -62,4 +60,11 @@ public class Irasas {
        return id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Irasas irasas = (Irasas) o;
+        return id.equals(irasas.id);
+    }
 }

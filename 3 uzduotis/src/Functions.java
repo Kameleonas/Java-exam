@@ -1,7 +1,6 @@
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import static java.lang.Double.parseDouble;
@@ -13,12 +12,12 @@ public class Functions {
                         *Menu*
                 [1] - naujas pajamų įrašas;
                 [2] - naujas išlaidų įrašas;
-                [3] - rasti pajamų įrašą;
-                [4] - rasti išlaidų įrašą;
-                [5] - balansas;
-                [6] - atspausdinti visas pajamas;
-                [7] - atspausdinti visas išlaidas;
-                [8] - pašalinti įrašą;
+                [3] - rasti pajamų ar išlaidų įrašą pagal ID;
+                [4] - balansas;
+                [5] - atspausdinti visas pajamas;
+                [6] - atspausdinti visas išlaidas;
+                [7] - pašalinti įrašą;
+                [8] - redaguoti įrašą;
                 [9] - išeiti;""");
     }
 
@@ -36,7 +35,6 @@ public class Functions {
                     System.out.println("Naujas pajamu irasas");
                     String[] irasas = naujasIrasas(scanner, "pajamos").split("/");
                     biudzetas.pridetiIrasa(new PajamuIrasas(parseDouble(irasas[0]), parseInt(irasas[1]), irasas[2], irasas[3], Boolean.parseBoolean(irasas[4])));
-                    System.out.println(biudzetas.irasas);
 //                go to start of the program
                     userInput = 0;
                 }
@@ -46,51 +44,33 @@ public class Functions {
 //                go to start of the program
                     userInput = 0;
                 }
-                case 3 -> {// pajamų įrašo suradimas
-                    System.out.println("Įveskite pajamų įrašo eilės numerį, įrašo suradimui");
-                   int userInFindByKey = scanner.nextInt();
-                   if (biudzetas.irasas.get(userInFindByKey) == null) {
-                       System.out.println("Įrašas su tokiu eilės numeriu nerastas.");
-//                go to start of the program
-                        userInput = 0;
-                    } else {
-                        System.out.println(biudzetas.irasas.get(userInFindByKey));
-//                go to start of the program
+                case 3 -> {// pajamų / išlaidų įrašo suradimas
+                    rastiIrasa(scanner, biudzetas);
+//                      go to start of the program
                         userInput = 0;
                     }
+                case 4 -> {
+                    System.out.printf("Jūsų biudžetas: %s Eur\n", biudzetas.balansas(biudzetas.irasas));
+                    userInput = 0;
                 }
-                case 4 -> {// išlaidų įrašo suradimas
-                    System.out.println("Įveskite įrašo ID, įrašo suradimui");
-                    int userInFindByKey = scanner.nextInt();
-                    if (biudzetas.irasas.get(userInFindByKey) == null) {
-                        System.out.println("Įrašas su tokiu eilės numeriu nerastas.");
-//                go to start of the program
-                        userInput = 0;
-                    } else {
-                        System.out.println(biudzetas.irasas.get(userInFindByKey));
-//                go to start of the program
-                        userInput = 0;
-                    }
+                case 5 -> {
+                    PajamuIrasas.visiPajamuIrasai(biudzetas.gautiPajamuIrasus(biudzetas.irasas));
+////                go to start of the program
+                    userInput = 0;
                 }
-//                case 5 -> {
-//                    System.out.printf("Jūsų biudžetas: %s Eur\n", biudzetas.balansas(biudzetas.pajamuIrasas, biudzetas.islaiduIrasas));
-//                    userInput = 0;
-//                }
-//                case 6 -> {
-//                    PajamuIrasas.visiPajamuIrasai(biudzetas.pajamuIrasas);
+                case 6 -> {
+                    IslaiduIrasas.visiIslaiduIrasai(biudzetas.gautiIslaiduIrasus(biudzetas.irasas));
 ////                go to start of the program
-//                    userInput = 0;
-//                }
-//                case 7 -> {
-//                    IslaiduIrasas.visiIslaiduIrasai(biudzetas.islaiduIrasas);
+                    userInput = 0;
+                }
+                case 7 -> {
+                    trintiIrasa(biudzetas, scanner);
 ////                go to start of the program
-//                    userInput = 0;
-//                }
-//                case 8 -> {
-//                    trintiIrasa(biudzetas.pajamuIrasas, biudzetas.islaiduIrasas, scanner);
-////                go to start of the program
-//                    userInput = 0;
-//                }
+                    userInput = 0;
+                }
+                case 8 -> {
+                    System.out.println("redaguoti irasa");
+                }
                 case 9 -> runProgram = false;
             }
         }
@@ -169,7 +149,7 @@ public class Functions {
         return stringResult;
     }
 
-    public static void trintiIrasa(ArrayList<PajamuIrasas> pajamuIrasas, ArrayList<IslaiduIrasas> islaiduIrasas, Scanner scanner) {
+    public static void trintiIrasa(Biudzetas biudzetas, Scanner scanner) {
         System.out.println("""
                 Pasirinkite kurį įrašą norite ištrinti:
                 [1] - pajamų įrašas;
@@ -179,32 +159,54 @@ public class Functions {
             case 1 -> {
                 System.out.println("Įveskite įrašo, kurį norite ištrinti ID [formatu IN-0]:");
                 String findAndDelete = scanner.next();
-                idCheckAndRemove(pajamuIrasas, findAndDelete);
+                idCheckAndRemove(biudzetas.irasas, findAndDelete);
             }
             case 2 -> {
                 System.out.println("Įveskite įrašo, kurį norite ištrinti ID [formatu - OUT-0]:");
                 String findAndDelete = scanner.next();
-                idCheckAndRemove2(islaiduIrasas, findAndDelete);
+                idCheckAndRemove(biudzetas.irasas, findAndDelete);
             }
             default -> System.out.println("Įvesties klaida.");
         }
     }
 
-    public static void idCheckAndRemove(ArrayList<PajamuIrasas> pajamuIrasas, String pajamosID) {
-        for (PajamuIrasas irasas : pajamuIrasas) {
-            if (irasas.getId().equals(pajamosID)) {
-                pajamuIrasas.remove(irasas);
+    public static void idCheckAndRemove(ArrayList<Irasas> irasas, String pajamosID) {
+        for (Irasas element : irasas) {
+            if (element.getId().equals(pajamosID)) {
+                irasas.remove(element);
                 return;
             }
         }
     }
 
-    public static void idCheckAndRemove2(ArrayList<IslaiduIrasas> islaiduIrasas, String islaidosID) {
-        for (IslaiduIrasas irasas : islaiduIrasas) {
-            if (irasas.getId().equals(islaidosID)) {
-                islaiduIrasas.remove(irasas);
-                return;
+    public static void rastiIrasa(Scanner scanner, Biudzetas biudzetas){
+        System.out.println("Įveskite įrašo kurį norite rasti ID:");
+        String userInFindByKey = scanner.next();
+        for (int i = 0; i < biudzetas.irasas.size(); i++) {
+            if (biudzetas.irasas.get(i).getId().equals(userInFindByKey)) {
+                System.out.printf("Įrašas rastas: \n %s \n", biudzetas.irasas.get(i));
             }
+        }
+    }
+
+    public static void redaguotiIrasa(Scanner scanner, ArrayList<Irasas> irasas){
+        System.out.println("Įveskite ID įrašo, kurį norite redaguoti:");
+        String userInID = scanner.next();
+        for (int i = 0; i < irasas.size(); i++) {
+            if (irasas.get(i).getId().equals(userInID)){
+                System.out.println("Suma:" + irasas.get(i).getSuma());
+                System.out.println("""
+                [1] - koreguoti;
+                [2] - toliau""");
+                int userIn = scanner.nextInt();
+                if (userIn == 1){
+                    System.out.println("Įveskite sumą:");
+                    double suma = scanner.nextDouble();
+                    irasas.get(i).setSuma(suma);
+                }
+            }
+
+
         }
     }
 }

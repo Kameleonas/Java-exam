@@ -4,12 +4,8 @@ public class PajamuIrasas extends Irasas{
 
     protected boolean transferComplete;
 
-    public PajamuIrasas(double suma, int kategorijosIndeksas, String date, String papildomaInfo, boolean transferComplete) {
-        super("pajamos");
-        this.setSuma(suma);
-        this.setKategorijosIndeksas(kategorijosIndeksas);
-        this.setDateTime(date);
-        this.setPapildomaInfo(papildomaInfo);
+    public PajamuIrasas(double suma, int kategorijosIndeksas, String dateTime, String papildomaInfo, boolean transferComplete) {
+        super(suma, dateTime, kategorijosIndeksas, papildomaInfo, "pajamos");
         this.transferComplete = transferComplete;
     }
 
@@ -31,12 +27,11 @@ public class PajamuIrasas extends Irasas{
 
     @Override
     public String toString() {
-        return "Pajamu Irasas: " +
-                "suma=" + getSuma() +
+        return "Pajamu Irasas, ID:" + getId() +
+                ", suma=" + getSuma() +
                 ", kategorijosIndeksas=" + getKategorijosIndeksas() +
                 ", date='" + getDateTime() + '\'' +
                 ", transferComplete=" + transferComplete +
-                ", papildomaInfo='" + getPapildomaInfo() +
-                ", iraso ID:" + getId() + '\'';
+                ", papildomaInfo='" + getPapildomaInfo() +'\'';
     }
 }

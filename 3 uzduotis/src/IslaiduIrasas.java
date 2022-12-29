@@ -1,17 +1,11 @@
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class IslaiduIrasas extends Irasas{
     protected String kortele;
 
     public IslaiduIrasas(double suma, String dateTime, int kategorijosIndeksas, String kortele, String papildomaInfo) {
-        super("islaidos");
-        this.setSuma(suma);
-        this.setDateTime(dateTime);
-        this.setKategorijosIndeksas(kategorijosIndeksas);
+        super(suma, dateTime, kategorijosIndeksas, papildomaInfo, "islaidos");
         this.kortele = kortele;
-        this.setPapildomaInfo(papildomaInfo);
     }
 
     public String getKortele() {
@@ -32,12 +26,11 @@ public class IslaiduIrasas extends Irasas{
 
     @Override
     public String toString() {
-        return "Islaidu Irasas:" +
-                "suma=" + getSuma() +
+        return "Islaidu Irasas, ID:" + getId() +
+                ", suma=" + getSuma() +
                 ", dateTime='" + getDateTime() + '\'' +
                 ", kategorija=" + getKategorijosIndeksas() + '\'' +
                 ", kortele='" + kortele + '\'' +
-                ", papildomaInfo='" + getPapildomaInfo() +
-                ", iraso ID:" + getId() + '\'';
+                ", papildomaInfo='" + getPapildomaInfo() + '\'';
     }
 }
