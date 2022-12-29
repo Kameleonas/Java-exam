@@ -1,10 +1,30 @@
 public class Irasas {
-    public double suma;
+    private double suma;
     private String dateTime;
     private int kategorijosIndeksas;
     private String papildomaInfo;
-    private String id;
+    private String id = "";
 
+    private static int counter1 = 0;
+    private static int counter2 = 0;
+
+    public Irasas(double suma, String dateTime, int kategorijosIndeksas, String papildomaInfo) {
+        this.suma = suma;
+        this.dateTime = dateTime;
+        this.kategorijosIndeksas = kategorijosIndeksas;
+        this.papildomaInfo = papildomaInfo;
+    }
+
+    public Irasas(String pajamosArIslaidos) {
+        if (pajamosArIslaidos.equals("pajamos")) {
+            id += Programa.prefixPajamosID + counter1;
+            counter1++;
+        }
+        if (pajamosArIslaidos.equals("islaidos")) {
+            id += Programa.prefixIslaidosID + counter2;
+            counter2++;
+        }
+    }
 
     public double getSuma() {
         return suma;
@@ -38,20 +58,8 @@ public class Irasas {
         this.papildomaInfo = papildomaInfo;
     }
 
-    public String getId(String pajamosArIslaidos) {
-        if (pajamosArIslaidos.equals("pajamos")) {
-            int counter1 = 0;
-            counter1++;
-            id += Programa.prefixPajamosID + counter1;
-            return id;
-        }
-        if (pajamosArIslaidos.equals("islaidos")) {
-            int counter2 = 0;
-            counter2++;
-            id += Programa.prefixIslaidosID + counter2;
-            return id;
-        }
-        return id;
+    public String getId() {
+       return id;
     }
 
 }

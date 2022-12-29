@@ -14,7 +14,7 @@ public class Programa {
 
         Scanner scanner = new Scanner(System.in);
 
-        Functions.program(biudzetas, scanner, prefixPajamosID, prefixIslaidosID);
+        Functions.program(biudzetas, scanner);
 
         scanner.close();
 
