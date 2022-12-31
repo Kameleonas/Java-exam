@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class IslaiduIrasas extends Irasas{
     protected String kortele;
 
-    public IslaiduIrasas(double suma, String dateTime, int kategorijosIndeksas, String kortele, String papildomaInfo) {
+    public IslaiduIrasas(double suma, String dateTime, String kortele, String papildomaInfo, int kategorijosIndeksas) {
         super(suma, dateTime, kategorijosIndeksas, papildomaInfo, "islaidos");
         this.kortele = kortele;
     }

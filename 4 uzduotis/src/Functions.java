@@ -44,7 +44,7 @@ public class Functions {
                     }
                     case 2 -> {// naujas išlaidų įrašas
                         String[] irasas = naujasIrasas(scanner, "islaidos").split("/");
-                        biudzetas.pridetiIrasa(new IslaiduIrasas(parseDouble(irasas[0]), irasas[1], parseInt(irasas[2]), irasas[3], irasas[4]));
+                        biudzetas.pridetiIrasa(new IslaiduIrasas(parseDouble(irasas[0]), irasas[1], irasas[2], irasas[3], parseInt(irasas[4])));
 //                go to start of the program
                         userInput = 0;
                     }
@@ -108,10 +108,11 @@ public class Functions {
         int userInputCard = 0;
 
         switch (pajamosArIslaidos) {
-            case "pajamos" -> System.out.println("Įveskite gautų pajamų sumą:");
+            case "pajamos" -> System.out.println("Įveskite pajamų sumą:");
             case "islaidos" -> System.out.println("Iveskite išleistą sumą:");
             default -> System.out.println("Error");
         }
+
         while (true) {
             try {
                 userInSuma = scanner.nextDouble();
@@ -121,10 +122,12 @@ public class Functions {
                 scanner.nextLine();
             }
         }
+
         System.out.print("""
                 [1] - gryni pinigai;
                 [2] - bankinis pavedimas;
                 """);
+
         while (true) {
             try {
                 index = scanner.nextInt();
@@ -132,13 +135,16 @@ public class Functions {
                     break;
                 } else {
                     System.out.println("Pasirinkite [1] - grįni pinigai arba [2] - bankinis pavedimas: ");
+                    scanner.nextLine();
                 }
             } catch (InputMismatchException ime) {
                 System.out.println("Pasirinkite [1] arba [2]: ");
                 scanner.nextLine();
             }
         }
+
         if (index == 1) {
+            scanner.nextLine();
             transferComplete = true;
         } else if (pajamosArIslaidos.equals("pajamos")) {
             System.out.println("""
@@ -146,6 +152,7 @@ public class Functions {
                     [1] - Taip;
                     [2] - Ne;""");
             int userInput = scanner.nextInt();
+            scanner.nextLine();
             switch (userInput) {
                 case 1 -> transferComplete = true;
                 case 2 -> transferComplete = false;
@@ -158,6 +165,7 @@ public class Functions {
                     [2] - MasterCard;
                     [3] - Visa;
                     [4] - AMEX;""");
+
             while (true) {
                 try {
                     userInputCard = scanner.nextInt();
@@ -172,6 +180,7 @@ public class Functions {
                     scanner.nextLine();
                 }
             }
+
             switch (userInputCard) {
                 case 1 -> card = CardType.MAESTRO;
                 case 2 -> card = CardType.MASTERCARD;
@@ -179,24 +188,27 @@ public class Functions {
                 case 4 -> card = CardType.AMEX;
             }
         }
+
+        try{
         switch (pajamosArIslaidos) {
             case "pajamos" -> {
-                System.out.println("Papildomas komentaras apie gautą pajamų įrašą:");
+                System.out.println("Papildomas komentaras apie pajamų įrašą:");
                 String currentDate = LocalDateTime.now().format(Programa.localDateTime);
-                scanner.nextLine();
-                String comment = scanner.nextLine();
-                stringResult = userInSuma + "/" + index + "/" + currentDate + "/" + comment + "/" + transferComplete;
+                    String comment = scanner.nextLine();
+                    stringResult = userInSuma + "/" + index + "/" + currentDate + "/" + comment + "/" + transferComplete;
                 return stringResult;
             }
             case "islaidos" -> {
                 System.out.println("Papildomas komentaras apie išlaidų įrašą:");
                 String currentDateTime = LocalDateTime.now().format(Programa.localDateTime);
-                scanner.nextLine();
-                String comment = scanner.nextLine();
-                stringResult = userInSuma + "/" + currentDateTime + "/" + index + "/" + card + "/" + comment;
-
+                    String comment = scanner.nextLine();
+                    stringResult = userInSuma + "/" + currentDateTime + "/" + card + "/" + comment + "/" + index;
                 return stringResult;
             }
+        }
+        }catch (ArrayIndexOutOfBoundsException oob){
+            System.out.println("Input Error");
+            stringResult = "";
         }
         return stringResult;
     }
@@ -206,7 +218,9 @@ public class Functions {
                 Pasirinkite kurį įrašą norite ištrinti:
                 [1] - pajamų įrašas;
                 [2] - išlaidų įrašas;""");
+
         int userInput = scanner.nextInt();
+
         switch (userInput) {
             case 1 -> {
                 System.out.println("Įveskite įrašo, kurį norite ištrinti ID [formatu IN-0]:");
@@ -234,18 +248,23 @@ public class Functions {
     public static void rastiRedaguotiIrasa(Scanner scanner, Biudzetas biudzetas, String rasti) {
         Irasas toReplace = null;
 
-        if (rasti.equals("rasti")) {
-            System.out.println("Įveskite įrašo kurį norite rasti ID:");
-        } else if (rasti.equals("redaguoti")) {
-            System.out.println("Įveskite įrašo kurį norite redaguoti ID:");
-        }
-        String userInFindByKey = scanner.next();
-        for (Irasas element : biudzetas.irasas) {
-            if (element.getId().equals(userInFindByKey)) {
-                System.out.printf("Įrašas rastas: \n %s \n", element);
-                toReplace = element;
+        if (biudzetas.irasas.size() == 0) {
+            System.out.println("Jokių išsaugotų įrašų nėra.");
+        } else {
+            if (rasti.equals("rasti")) {
+                System.out.println("Įveskite įrašo kurį norite rasti ID:");
+            } else if (rasti.equals("redaguoti")) {
+                System.out.println("Įveskite įrašo kurį norite redaguoti ID:");
+            }
+            String userInFindByKey = scanner.next();
+            for (Irasas element : biudzetas.irasas) {
+                if (element.getId().equals(userInFindByKey)) {
+                    System.out.printf("Įrašas rastas: \n %s \n", element);
+                    toReplace = element;
+                }
             }
         }
+
         if (rasti.equals("redaguoti") && toReplace != null) {
             System.out.println("Suma: " + toReplace.getSuma());
             if (userChoice(scanner)) {
@@ -270,7 +289,8 @@ public class Functions {
             System.out.println("Papildoma informacija: " + toReplace.getPapildomaInfo());
             if (userChoice(scanner)) {
                 System.out.println("Įveskite papildomą informaciją: ");
-                String info = scanner.next();
+                scanner.nextLine();
+                String info = scanner.nextLine();
                 toReplace.setPapildomaInfo(info);
             }
             if (toReplace instanceof PajamuIrasas) {
@@ -289,8 +309,6 @@ public class Functions {
                     ((IslaiduIrasas) toReplace).setKortele(card);
                 }
             }
-        } else {
-            System.out.println("Įrašas su įvestu ID nerastas.");
         }
     }
 

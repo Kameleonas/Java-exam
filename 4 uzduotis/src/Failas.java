@@ -43,11 +43,13 @@ public class Failas{
                     irasas.add(new PajamuIrasas(parseDouble(record[1]), parseInt(record[3]), record[2], record[4], parseBoolean(record[5])));
                 } else if (record[0].contains("OUT")) {
                     // record = [OUT, SUM, DATE TIME, CAT INDEX, INFO, CARD]
-                    irasas.add(new IslaiduIrasas(parseDouble(record[1]), record[2], parseInt(record[3]), record[5], record[4]));
+                    irasas.add(new IslaiduIrasas(parseDouble(record[1]), record[2], record[4], record[5], parseInt(record[3])));
                 } else System.out.println("Error");
             }
+
             bufferedReader.close();
             fileReader.close();
+
         }catch (FileNotFoundException fnf){
             System.out.println("Failas, pavadinimu " + fileNameFrom + " nerastas");
         }
