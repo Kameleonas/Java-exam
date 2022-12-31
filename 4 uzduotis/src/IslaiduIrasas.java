@@ -26,11 +26,13 @@ public class IslaiduIrasas extends Irasas{
 
     @Override
     public String toString() {
-        return "Islaidu Irasas, ID:" + getId() +
-                ", suma=" + getSuma() +
-                ", dateTime='" + getDateTime() + '\'' +
-                ", kategorija=" + getKategorijosIndeksas() + '\'' +
-                ", kortele='" + kortele + '\'' +
-                ", papildomaInfo='" + getPapildomaInfo() + '\'';
+        return String.format("""
+                Islaidu Irasas, ID: %s,
+                suma= %s,
+                dateTime= %s,
+                kategorija= %s,
+                kortele= %s,
+                papildomaInfo= %s
+                """, getId(), getSuma(), getDateTime(), getKategorijosIndeksas(), kortele, getPapildomaInfo());
     }
 }

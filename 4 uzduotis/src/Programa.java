@@ -11,7 +11,7 @@ public class Programa {
 
         Biudzetas biudzetas = new Biudzetas();
 
-        Failas failas = new Failas("New File");
+        Failas failas = new Failas("New File", "From file");
 
         Scanner scanner = new Scanner(System.in);
 

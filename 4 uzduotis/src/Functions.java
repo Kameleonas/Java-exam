@@ -77,10 +77,17 @@ public class Functions {
 //                    go to start of the program
                         userInput = 0;
                     }
-                    case 9 -> failas.irasytiIFaila(biudzetas.irasas);
-                    case 10 -> failas.gautiIrasusIsFailo(biudzetas.irasas);
+                    case 9 -> {
+                        failas.irasytiIFaila(biudzetas.irasas);
+//                    go to start of the program
+                        userInput = 0;
+                    }
+                    case 10 -> {
+                        failas.gautiIrasusIsFailo(biudzetas.irasas);
+//                        go to start of the program
+                        userInput = 0;
+                    }
                     case 11 -> runProgram = false;
-                    case 12 -> System.out.println(biudzetas.irasas);
                 }
             } catch (InputMismatchException ime) {
                 System.out.println("Klaida! Įveskite skaičių nuo 1 iki 9, pasirinkimams iš pafrindinio meniu: ");

@@ -1,20 +1,18 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
+import static java.lang.Boolean.parseBoolean;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 
 public class Failas{
 
     private String fileName;
+    private String fileNameFrom;
 
-    public Failas(String fileName) {
+    public Failas(String fileName, String fileNameFrom) {
         this.fileName = fileName;
+        this.fileNameFrom = fileNameFrom;
     }
 
     public void irasytiIFaila(ArrayList<Irasas> irasas) throws IOException {
@@ -32,19 +30,27 @@ public class Failas{
     }
 
     public ArrayList<Irasas> gautiIrasusIsFailo(ArrayList<Irasas> irasas) throws IOException {
-        File file = new java.io.File(fileName);
-        FileReader fileReader = new FileReader(file);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        try {
+            File file = new java.io.File(fileNameFrom);
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            String[] record = line.split(",");
-            irasas.add(new Irasas(parseDouble(record[0]),record[1],parseInt(record[2]), record[3], record[4]));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] record = line.split(",");
+                if (record[0].contains("IN")) {
+                    // record = [IN, SUM, DATE TIME, CAT INDEX, INFO, TRX STATUS]
+                    irasas.add(new PajamuIrasas(parseDouble(record[1]), parseInt(record[3]), record[2], record[4], parseBoolean(record[5])));
+                } else if (record[0].contains("OUT")) {
+                    // record = [OUT, SUM, DATE TIME, CAT INDEX, INFO, CARD]
+                    irasas.add(new IslaiduIrasas(parseDouble(record[1]), record[2], parseInt(record[3]), record[5], record[4]));
+                } else System.out.println("Error");
+            }
+            bufferedReader.close();
+            fileReader.close();
+        }catch (FileNotFoundException fnf){
+            System.out.println("Failas, pavadinimu " + fileNameFrom + " nerastas");
         }
-
-        bufferedReader.close();
-        fileReader.close();
-
         return irasas;
     }
 }
